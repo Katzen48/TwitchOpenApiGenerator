@@ -1,5 +1,14 @@
 name: 'Twitch OpenAPI Generator'
 description: 'Generates an OpenAPI Spec from the Twitch Helix API docs'
 runs:
-  using: 'node12'
-  main: 'src/index.js'
+  using: 'composite'
+  steps:
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.4.1
+      with:
+        architecture: x64
+        check-latest: true
+        cache: npm
+    - name: Install Dependencies
+      run: npm install
+      shell: bash
