@@ -9,6 +9,7 @@ runs:
         architecture: x64
         check-latest: true
         cache: npm
+        node-version: '16'
     - name: Install Dependencies
       run: npm install
       shell: bash
