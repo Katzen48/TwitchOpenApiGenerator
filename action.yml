@@ -3,6 +3,7 @@ description: 'Generates an OpenAPI Spec from the Twitch Helix API docs'
 runs:
   using: 'composite'
   steps:
+    - uses: 'actions/checkout@v2'
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.4.1
       with:
@@ -11,4 +12,7 @@ runs:
         node-version: '16'
     - name: Install Dependencies
       run: npm install
+      shell: bash
+    - name: Get Docs Updates
+      run: node .
       shell: bash
