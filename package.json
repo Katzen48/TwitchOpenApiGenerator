@@ -1,0 +1,12 @@
+{
+  "name": "twitchopenapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^11.0.0",
+    "yaml": "^1.10.2"
+  }
+}

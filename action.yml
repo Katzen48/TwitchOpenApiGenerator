@@ -1,0 +1,5 @@
+name: 'Twitch OpenAPI Generator'
+description: 'Generates an OpenAPI Spec from the Twitch Helix API docs'
+runs:
+  using: 'node12'
+  main: 'src/index.js'
