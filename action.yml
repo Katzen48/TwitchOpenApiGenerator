@@ -3,6 +3,7 @@ description: 'Generates an OpenAPI Spec from the Twitch Helix API docs'
 runs:
   using: 'composite'
   steps:
+    - uses: actions/checkout@v2
     - name: Install Dependencies
       uses: ianwalter/puppeteer-container@v4.0.0
       with:
