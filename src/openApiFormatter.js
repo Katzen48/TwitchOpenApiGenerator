@@ -38,7 +38,7 @@ const formatter = {
         let paths = {};
 
         json.forEach(path => {
-            let route = path.url.slice(path.url.indexOf(BASE_PATH) + BASE_PATH.length);
+            let route = path.url.slice(path.url.indexOf(BASE_PATH) + BASE_PATH.length).split('?')[0];
             let responses = {
                 401: {
                     description: 'Unauthenticated: Missing/invalid Token',
