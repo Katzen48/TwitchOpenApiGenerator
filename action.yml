@@ -4,6 +4,7 @@ runs:
   using: 'composite'
   steps:
     - run: ls ${{ github.action_path }}
+      shell: bash
     - name: Install Dependencies
       uses: ianwalter/puppeteer-container@v4.0.0
       with:
