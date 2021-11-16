@@ -4,10 +4,10 @@ runs:
   using: 'composite'
   steps:
     - name: Install Dependencies
-      uses: tj-actions/puppeteer@v3.2
+      uses: ianwalter/puppeteer-container@v4.0.0
       with:
-        args: npm install ${{ github.action_path }}
+        args: pnpm i ${{ github.action_path }}
     - name: Get Docs Updates
-      uses: tj-actions/puppeteer@v3.2
+      uses: ianwalter/puppeteer-container@v4.0.0
       with:
         args: node ${{ github.action_path }}/src/index.js
