@@ -3,11 +3,10 @@ description: 'Generates an OpenAPI Spec from the Twitch Helix API docs'
 runs:
   using: 'composite'
   steps:
-    - uses: 'actions/checkout@v2'
     - name: Install Dependencies
       uses: tj-actions/puppeteer@v3.2
       with:
-        args: npm install
+        args: npm install ${{ github.action_path }}
     - name: Get Docs Updates
       uses: tj-actions/puppeteer@v3.2
       with:
