@@ -19,7 +19,6 @@ const scraperObject = {
         await page.mainFrame().waitForSelector('code');
         // Get the link to all the required books
         return await page.evaluate(() => {
-            let routes = [];
             let docParts = document.querySelectorAll('.doc-content .left-docs');
 
             return Array.from(docParts).slice(1).map(el => {
@@ -77,8 +76,9 @@ const scraperObject = {
                             }
                         });
 
+                const possibleMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
                 return {
-                    method: methodPart in ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] ? methodPart : 'GET',
+                    method: possibleMethods.includes(methodPart) ? methodPart : 'GET',
                     url: url ? url : urlField,
                     bodyParameters,
                     queryParameters,

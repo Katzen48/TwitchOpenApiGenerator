@@ -81,7 +81,7 @@ const formatter = {
                 };
             });
 
-            if (path.method in ['GET', 'POST', 'PUT', 'PATCH']) {
+            if (['GET', 'POST', 'PUT', 'PATCH'].includes(path.method)) {
                 let responseProperties = {};
 
                 path.responseFields.forEach(field => {
