@@ -3,11 +3,11 @@ description: 'Generates an OpenAPI Spec from the Twitch Helix API docs'
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v2
+    - run: ls ${{ github.action_path }}
     - name: Install Dependencies
       uses: ianwalter/puppeteer-container@v4.0.0
       with:
-        args: ls ${{ github.action_path }}
+        args: npm --prefix ${{ github.action_path }} install ${{ github.action_path }}
     - name: Get Docs Updates
       uses: ianwalter/puppeteer-container@v4.0.0
       with:
