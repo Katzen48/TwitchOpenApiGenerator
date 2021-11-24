@@ -40,15 +40,15 @@ const scraperObject = {
                 let responseFieldsIndex = responseFieldsHeadlineIndex === -1 ? -1 :
                         children.slice(responseFieldsHeadlineIndex).findIndex(child => child.tagName === 'TABLE');
 
-
                 let urlField = children[urlIndex + urlHeadlineIndex].innerText;
+
                 let urlParts = urlField.split(' ');
                 let methodPart = urlParts[0].toUpperCase();
                 let url = urlParts[1];
 
                 let bodyParameters = bodyParametersIndex === -1 ? [] :
                     Array.from(children[bodyParametersIndex + bodyParametersHeadlineIndex].querySelectorAll('tbody tr'))
-                        .filter(tr => !!tr.querySelector('code'))
+                        .filter(tr => !!tr.children[0].querySelector('code'))
                         .map(child => {
                             return {
                                 name: child.children[0].querySelector('code').innerText,
@@ -58,7 +58,7 @@ const scraperObject = {
 
                 let queryParameters = queryParametersIndex === -1 ? [] :
                     Array.from(children[queryParametersIndex + queryParametersHeadlineIndex].querySelectorAll('tbody tr'))
-                        .filter(tr => !!tr.querySelector('code'))
+                        .filter(tr => !!tr.children[0].querySelector('code'))
                         .map(child => {
                             return {
                                 name: child.children[0].querySelector('code').innerText,
@@ -68,7 +68,7 @@ const scraperObject = {
 
                 let responseFields = responseFieldsIndex === -1 ? [] :
                     Array.from(children[responseFieldsIndex + responseFieldsHeadlineIndex].querySelectorAll('tbody tr'))
-                        .filter(tr => !!tr.querySelector('code'))
+                        .filter(tr => !!tr.children[0].querySelector('code'))
                         .map(child => {
                             return {
                                 name: child.children[0].querySelector('code').innerText,
