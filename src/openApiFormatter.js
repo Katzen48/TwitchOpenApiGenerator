@@ -58,14 +58,7 @@ const formatter = {
                     properties: {},
                 }
             };
-            let parameters = [
-                {
-                    in: 'header',
-                    name: 'client_id',
-                    required: true,
-                    type: 'string',
-                },
-            ];
+            let parameters = [];
 
             path.queryParameters.forEach(parameter => {
                 parameters[parameters.length] = {
@@ -112,11 +105,24 @@ const formatter = {
             }
 
             let apiPath = {
-                parameters,
+                parameters: [
+                    {
+                        in: 'header',
+                        name: 'client_id',
+                        required: true,
+                        type: 'string',
+                    },
+                ],
             };
 
+            if (route in paths) {
+                apiPath = paths[route];
+            }
+
             apiPath[path.method.toLowerCase()] = {
-                summary : route,
+                summary: path.summary,
+                description : path.description,
+                tags: path.tags,
                 /*
                 security: [
                     'accessCode',
@@ -124,6 +130,10 @@ const formatter = {
                  */
                 responses,
             };
+
+            if (parameters.length > 0) {
+                apiPath[path.method.toLowerCase()].parameters = parameters;
+            }
 
             if (body.schema.properties.length > 0) {
                 apiPath[path.method.toLowerCase()] = Object.assign(apiPath[path.method.toLowerCase()], {
@@ -150,7 +160,8 @@ const formatter = {
             },
             info: {
                 title: 'Twitch Helix API',
-                description: 'The Twitch API is a RESTful API that lets developers build creative integrations for the broader Twitch community.',
+                description: 'The Twitch API is a RESTful API that lets developers build creative integrations for ' +
+                    'the broader Twitch community. THIS DOCUMENTATION IS NEITHER MAINTAINED BY OR AFFILIATED WITH TWITCH',
                 termsOfService: 'https://www.twitch.tv/p/en/legal/developer-agreement/',
                 contact: {
                     name: 'TwitchDev',

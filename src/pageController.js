@@ -10,11 +10,11 @@ async function scrapeAll(browserInstance, docs){
         console.log('Docs version', latestUpdateDate);
         if (!docs || docs.info.version !== latestUpdateDate) {
             console.log('Update available');
-
-            let routes = await pageScraper.getAllDocParts(browser);
-
-            return formatter.toOpenApi(routes, latestUpdateDate);
         }
+
+        let routes = await pageScraper.getAllDocParts(browser);
+
+        docs = formatter.toOpenApi(routes, latestUpdateDate);
     }
     catch(err){
         console.log("Could not resolve the browser instance => ", err);

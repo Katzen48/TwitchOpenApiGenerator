@@ -1,0 +1,9 @@
+version: 2
+
+updates:
+  - package-ecosystem: "docker"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    schedule:
+      interval: "daily"
