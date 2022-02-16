@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^11.0.0",
+    "puppeteer": "^13.3.2",
     "yaml": "^1.10.2"
   }
 }
