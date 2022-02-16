@@ -44,6 +44,8 @@ module.exports = function () {
         let children = Array.from(el.children);
         let leftDocs = children.filter(child => child.classList.contains('left-docs'))[0];
         let leftDocsChildren = Array.from(leftDocs.children);
+        let rightCode = Array.from(el.querySelectorAll('.right-code .language-json code'))
+        let example = rightCode.length > 0 ? rightCode[0].innerText : null;
 
         let urlHeadlineIndex = leftDocsChildren.findIndex(child => child.innerText.toLowerCase().startsWith('url') && child.tagName === 'H3');
         let urlIndex = leftDocsChildren.slice(urlHeadlineIndex).findIndex(child => child.tagName === 'P');
@@ -107,6 +109,7 @@ module.exports = function () {
             summary: tableEndpoint.Endpoint.text,
             description: tableEndpoint.Description,
             tags: [tableEndpoint.Resource],
+            example,
         });
     });
 

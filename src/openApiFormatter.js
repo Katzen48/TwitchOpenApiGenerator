@@ -4,6 +4,56 @@ const SCHEME = 'https';
 const BASE_URL = `${SCHEME}://${HOST}${BASE_PATH}`;
 
 const formatter = {
+    mapPropertiesToOpenApi(object) {
+        let type = typeof object;
+
+        if (object === null) {
+            type = "string";
+        }
+
+        if (type === 'object') {
+            if (Array.isArray(object)) {
+                type = 'array';
+                let items = {
+                    type: 'string',
+                };
+
+                if (object.length > 0) {
+                    items = this.mapPropertiesToOpenApi(object[0]);
+                }
+
+                return {
+                    type,
+                    items,
+                }
+            } else {
+                let properties = {};
+
+                for (const property of Object.keys(object)) {
+                    properties[property] = this.mapPropertiesToOpenApi(object[property]);
+                }
+
+                return {
+                    type,
+                    properties,
+                };
+            }
+        }
+
+        return {
+            type,
+        };
+    },
+    mapResponseFromExample(example) {
+        try {
+            let json = example.replaceAll('\n', '').replace(new RegExp('[}][,]?[\\s]+[\\.]{3}', 'g'), "}");
+            return this.mapPropertiesToOpenApi(JSON.parse(json))
+        } catch (error) {
+            console.error(error);
+
+            return null;
+        }
+    },
     mapDataType(dataType) {
         switch (dataType.toLocaleString()) {
             /*
@@ -64,7 +114,9 @@ const formatter = {
                 parameters[parameters.length] = {
                     name: parameter.name,
                     in: 'query',
-                    type: this.mapDataType(parameter.type),
+                    schema: {
+                        type: this.mapDataType(parameter.type),
+                    },
                 };
             });
 
@@ -75,29 +127,25 @@ const formatter = {
             });
 
             if (['GET', 'POST', 'PUT', 'PATCH'].includes(path.method)) {
-                let responseProperties = {};
+                let responseProperties = this.mapResponseFromExample(path.example);
 
-                path.responseFields.forEach(field => {
-                    responseProperties[field.name] = {
-                        type: this.mapDataType(field.type),
-                    };
-                });
+                if (responseProperties === null) {
+                    console.log(path.method, route, "example cannot be parsed");
+                }
 
                 responses['200'] = {
                     description: 'OK',
                 };
 
-                /* TODO
                 if (responseProperties) {
                     responses['200'] = Object.assign(responses['200'], {
-                        schema: {
-                            type: 'object',
-                            properties: 'data',
-
-                        }
+                        content: {
+                            'application/json': {
+                                schema: responseProperties,
+                            },
+                        },
                     });
                 }
-                 */
             } else if (path.method === 'DELETE') {
                 responses['204'] = {
                     description: 'Deleted',
@@ -110,7 +158,9 @@ const formatter = {
                         in: 'header',
                         name: 'client_id',
                         required: true,
-                        type: 'string',
+                        schema: {
+                            type: 'string',
+                        },
                     },
                 ],
             };
@@ -148,11 +198,12 @@ const formatter = {
         })
 
         return {
-            swagger: '2.0',
-            host: HOST,
-            basePath: BASE_PATH,
-            schemes: [
-                SCHEME,
+            openapi: '3.0.0',
+            servers: [
+                {
+                    url: BASE_URL,
+                    description: 'Production API'
+                }
             ],
             externalDocs: {
                 description: 'Official documentation',
