@@ -11,12 +11,14 @@ runs:
       with:
         node-version: '16'
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
+      shell: bash
+    - name: Install Playwright
+      run: npx playwright install --with-deps
       shell: bash
     - name: Get Docs Updates
-      uses: ianwalter/playwright-container@v3.0.0
-      with:
-        args: node .
+      run: node .
+      shell: bash
     - name: Cleanup
       run: rm -R src && rm package*.json && rm -R node_modules
       shell: bash
