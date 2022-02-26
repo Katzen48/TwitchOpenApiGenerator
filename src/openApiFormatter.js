@@ -6,6 +6,7 @@ const BASE_URL = `${SCHEME}://${HOST}${BASE_PATH}`;
 const formatter = {
     mapPropertiesToOpenApi(object) {
         let type = typeof object;
+        let example = null;
 
         if (object === null) {
             type = "string";
@@ -38,11 +39,19 @@ const formatter = {
                     properties,
                 };
             }
+        } else {
+            example = object;
         }
 
-        return {
+        let apiProperty = {
             type,
         };
+
+        if (example) {
+            apiProperty['example'] = example;
+        }
+
+        return apiProperty;
     },
     mapResponseFromExample(example) {
         try {
