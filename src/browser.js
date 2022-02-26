@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright');
 
 async function startBrowser(){
     process.env.DEBUG = 'puppeteer:*';
@@ -6,7 +6,7 @@ async function startBrowser(){
     let browser;
     try {
         console.log("Opening the browser......");
-        browser = await puppeteer.launch({
+        browser = await chromium.launch({
             headless: true,
             args: ["--no-sandbox"],
             'ignoreHTTPSErrors': true
