@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "playwright": "^1.20.2",
+    "playwright": "^1.21.0",
     "yaml": "^1.10.2"
   }
 }
