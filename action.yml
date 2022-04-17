@@ -11,7 +11,7 @@ runs:
       with:
         node-version: '16'
     - name: Install Dependencies
-      run: npm ci
+      run: npm install
       shell: bash
     - name: Install Playwright
       run: npx playwright install --with-deps
