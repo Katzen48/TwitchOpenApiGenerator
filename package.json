@@ -7,6 +7,6 @@
   "license": "ISC",
   "dependencies": {
     "playwright": "^1.21.0",
-    "yaml": "^1.10.2"
+    "yaml": "^2.0.1"
   }
 }
