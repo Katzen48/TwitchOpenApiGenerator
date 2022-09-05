@@ -54,8 +54,29 @@ const formatter = {
         return apiProperty;
     },
     mapResponseFromExample(example) {
+        if (example === null) {
+            return null;
+        }
+
         try {
-            let json = example.replaceAll('\n', '').replace(new RegExp('[}][,]?[\\s]+[\\.]{3}', 'g'), "}");
+            let json = example.replaceAll('\n', '')
+                // Get rid of `...` in the beginning of an object
+                .replace(new RegExp("[\\{][\\s]*([\\.][\\s]?){3}(?=[\\s]*[\"])", "g"), "{")
+                // Get rid of `...` in the middle of an object
+                .replace(new RegExp("[,][\\s]*([\\.][\\s]?){3}(?=[\\s]*[\"])", "g"), ",")
+                // Get rid of `...` at the end of an object
+                .replace(new RegExp("[,]?[\\s]*([\\.][\\s]?){3}(?=[\\s]*[\\}])", "g"), "")
+
+                // Get rid of `...` in the beginning of an array
+                .replace(new RegExp("[\\[][\\s]*([\\.][\\s]?){3}(?=[\\s]*[\\{])", "g"), "[")
+                // Get rid of `...` in the middle of an array
+                .replace(new RegExp("[}][,]?[\\s]*([\\.][\\s]?){3}(?=[\\s]*[\\{])", "g"), "},")
+                // Get rid of `...` at the end of an array
+                .replace(new RegExp("[}][,]?[\\s]*([\\.][\\s]?){3}(?=[\\s]*[\\]])", "g"), "}")
+
+                // Get rid of trailing comma at the end of an array
+                .replace(new RegExp("[}][,][\\s]*(?=[\\s]*[\\]])", "g"), "}");
+
             return this.mapPropertiesToOpenApi(JSON.parse(json))
         } catch (error) {
             console.error(error);
