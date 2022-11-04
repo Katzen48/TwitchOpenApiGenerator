@@ -266,11 +266,13 @@ const formatter = {
                 securitySchemes: {
                     oauth: {
                         type: 'oauth2',
+                        in: 'header',
+                        scheme: 'http',
+                        openIdConnectUrl: 'https://id.twitch.tv/oauth2/.well-known/openid-configuration',
                         description: 'Twitch APIs use OAuth 2.0 access tokens to access resources. If you’re not already familiar with the specification, reading it may help you better understand how to get access tokens to use with the Twitch API.',
                         flows: {
                             implicit: {
                                 authorizationUrl: 'https://id.twitch.tv/oauth2/authorize',
-                                tokenUrl: 'https://id.twitch.tv/oauth2/token',
                                 scopes
                             },
                             authorizationCode: {
