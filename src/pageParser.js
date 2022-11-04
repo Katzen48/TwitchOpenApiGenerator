@@ -39,7 +39,8 @@ module.exports = function () {
 
     extractTableData(document.querySelectorAll('.doc-content .left-docs table')[0]).forEach(tableEndpoint => {
         let hashIndex = tableEndpoint.Endpoint.url.lastIndexOf('#') + 1;
-        let el = document.getElementById(tableEndpoint.Endpoint.url.substring(hashIndex)).parentElement.parentElement;
+        let id = tableEndpoint.Endpoint.url.substring(hashIndex);
+        let el = document.getElementById(id).parentElement.parentElement;
 
         let children = Array.from(el.children);
         let leftDocs = children.filter(child => child.classList.contains('left-docs'))[0];
@@ -110,7 +111,7 @@ module.exports = function () {
             description: tableEndpoint.Description,
             tags: [tableEndpoint.Resource],
             example,
-            docsUrl: tableEndpoint.Endpoint.url.toLowerCase(),
+            id: id.toLowerCase(),
         });
     });
 

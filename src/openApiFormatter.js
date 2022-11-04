@@ -119,7 +119,9 @@ const formatter = {
         let scopesSet = new Set();
 
         json.forEach(path => {
-            path.scopes.forEach(item => scopesSet.add(item));
+            if (path.scopes) {
+                path.scopes.forEach(item => scopesSet.add(item));
+            }
 
             let route = path.url.slice(path.url.indexOf(BASE_PATH) + BASE_PATH.length).split('?')[0];
             let responses = {
@@ -206,9 +208,9 @@ const formatter = {
                 summary: path.summary,
                 description : path.description,
                 tags: path.tags,
-                security: {
-                    oauth: [],
-                },
+                security: [{
+                    oauth: []
+                }],
                 responses,
             };
 
@@ -217,7 +219,7 @@ const formatter = {
             }
 
             if (path.scopes && path.scopes.length > 0) {
-                apiPath.security.oauth = path.scopes;
+                apiPath[path.method.toLowerCase()].security[0].oauth = path.scopes;
             }
 
             if (body.schema.properties.length > 0) {
@@ -232,9 +234,7 @@ const formatter = {
             paths[route] = apiPath;
         });
 
-        let scopes = {};
-        scopesSet.forEach(item => scopes[item] = item);
-
+        let scopes = Array.from(scopesSet);
         return {
             openapi: '3.0.0',
             servers: [

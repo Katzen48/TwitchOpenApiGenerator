@@ -1,9 +1,5 @@
-class Parser {
-    constructor(routes) {
-        this.routes = routes;
-    }
-
-    extractTableData(domTable) {
+module.exports = function (routes) {
+    function extractTableData(domTable) {
         let columns = [];
         let elements = [];
 
@@ -30,7 +26,7 @@ class Parser {
                     cell.querySelectorAll('a').forEach(link => {
                         values.push({
                             text: link.innerText,
-                            url: link.href
+                            url: link.href.substring(link.href.indexOf('#') + 1).toLowerCase()
                         });
                     });
 
@@ -42,24 +38,25 @@ class Parser {
         });
     }
 
-    parse() {
-        let scopes = {};
-        this.extractTableData(document.querySelectorAll('.text-content table')[0]).forEach(scope => {
-            scope['Type of Access and Associated Endpoints'].forEach(endpoint => {
-                if (!scopes.hasOwnProperty(endpoint.url.toLowerCase())) {
-                    scopes[endpoint.url.toLowerCase()] = new Set();
-                }
+    let scopes = {};
+    extractTableData(document.querySelectorAll('.text-content table')[0]).forEach(scope => {
+        scope['Type of Access and Associated Endpoints'].forEach(endpoint => {
+            if (!scopes.hasOwnProperty(endpoint.url)) {
+                scopes[endpoint.url] = new Set();
+            }
 
-                scopes[endpoint.url.toLowerCase()].add(scope['Scope Name']);
-            });
+            scopes[endpoint.url].add(scope['Scope Name']);
         });
+    });
 
-        return this.routes.map(route => {
-            route.scopes = scopes[route.docsPath];
+    return routes.map(route => {
+        let routeScopes = scopes[route.id];
+        if (!routeScopes) {
+            routeScopes = [];
+        }
 
-            return route;
-        });
-    }
+        route.scopes = routeScopes;
+
+        return route;
+    });
 }
-
-module.exports = Parser;
