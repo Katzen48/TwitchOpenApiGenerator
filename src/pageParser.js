@@ -110,6 +110,7 @@ module.exports = function () {
             description: tableEndpoint.Description,
             tags: [tableEndpoint.Resource],
             example,
+            docsUrl: tableEndpoint.Endpoint.url.toLowerCase(),
         });
     });
 

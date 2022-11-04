@@ -13,7 +13,7 @@ async function scrapeAll(browserInstance, docs){
         }
 
         let routes = await pageScraper.getAllDocParts(browser);
-
+        routes = await pageScraper.getScopes(browser, routes);
         docs = formatter.toOpenApi(routes, latestUpdateDate);
     }
     catch(err){

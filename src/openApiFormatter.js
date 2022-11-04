@@ -116,8 +116,11 @@ const formatter = {
     },
     toOpenApi(json, version) {
         let paths = {};
+        let scopesSet = new Set();
 
         json.forEach(path => {
+            path.scopes.forEach(item => scopesSet.add(item));
+
             let route = path.url.slice(path.url.indexOf(BASE_PATH) + BASE_PATH.length).split('?')[0];
             let responses = {
                 401: {
@@ -203,16 +206,18 @@ const formatter = {
                 summary: path.summary,
                 description : path.description,
                 tags: path.tags,
-                /*
-                security: [
-                    'accessCode',
-                ],
-                 */
+                security: {
+                    oauth: [],
+                },
                 responses,
             };
 
             if (parameters.length > 0) {
                 apiPath[path.method.toLowerCase()].parameters = parameters;
+            }
+
+            if (path.scopes && path.scopes.length > 0) {
+                apiPath.security.oauth = path.scopes;
             }
 
             if (body.schema.properties.length > 0) {
@@ -225,7 +230,10 @@ const formatter = {
             }
 
             paths[route] = apiPath;
-        })
+        });
+
+        let scopes = {};
+        scopesSet.forEach(item => scopes[item] = item);
 
         return {
             openapi: '3.0.0',
@@ -252,6 +260,30 @@ const formatter = {
                 version,
             },
             paths,
+            components: {
+                securitySchemes: {
+                    oauth: {
+                        type: 'oauth2',
+                        description: 'Twitch APIs use OAuth 2.0 access tokens to access resources. If you’re not already familiar with the specification, reading it may help you better understand how to get access tokens to use with the Twitch API.',
+                        flows: {
+                            implicit: {
+                                authorizationUrl: 'https://id.twitch.tv/oauth2/authorize',
+                                tokenUrl: 'https://id.twitch.tv/oauth2/token',
+                                scopes
+                            },
+                            authorizationCode: {
+                                authorizationUrl: 'https://id.twitch.tv/oauth2/authorize',
+                                tokenUrl: 'https://id.twitch.tv/oauth2/token',
+                                scopes
+                            },
+                            clientCredentials: {
+                                tokenUrl: 'https://id.twitch.tv/oauth2/token',
+                                scopes: {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
