@@ -234,7 +234,9 @@ const formatter = {
             paths[route] = apiPath;
         });
 
-        let scopes = Array.from(scopesSet);
+        let scopes = {};
+        scopesSet.forEach(item => scopes[item] = item);
+
         return {
             openapi: '3.0.0',
             servers: [
