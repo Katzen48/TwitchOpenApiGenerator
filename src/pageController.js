@@ -3,7 +3,7 @@ const formatter = require('./openApiFormatter');
 
 async function scrapeAll(browserInstance, docs){
     let browser;
-    try{
+    try {
         browser = await browserInstance;
         let latestUpdateDate = await pageScraper.getLatestUpdateDate(browser);
 
@@ -16,7 +16,7 @@ async function scrapeAll(browserInstance, docs){
         routes = await pageScraper.getScopes(browser, routes);
         docs = formatter.toOpenApi(routes, latestUpdateDate);
     }
-    catch(err){
+    catch(err) {
         console.log("Could not resolve the browser instance => ", err);
     } finally {
         await browser.close();

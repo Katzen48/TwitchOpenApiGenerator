@@ -116,11 +116,17 @@ const formatter = {
     },
     toOpenApi(json, version) {
         let paths = {};
-        let scopesSet = new Set();
+        let scopes = {};
 
         json.forEach(path => {
             if (path.scopes) {
-                path.scopes.forEach(item => scopesSet.add(item));
+                path.scopes.forEach(item => {
+                    if (scopes.hasOwnProperty(item.name)) {
+                        return;
+                    }
+
+                    scopes[item.name] = item.description
+                });
             }
 
             let route = path.url.slice(path.url.indexOf(BASE_PATH) + BASE_PATH.length).split('?')[0];
@@ -219,7 +225,7 @@ const formatter = {
             }
 
             if (path.scopes && path.scopes.length > 0) {
-                apiPath[path.method.toLowerCase()].security[0].oauth = path.scopes;
+                path.scopes.forEach(scope => apiPath[path.method.toLowerCase()].security[0].oauth.push(scope.name))
             }
 
             if (body.schema.properties.length > 0) {
@@ -233,9 +239,6 @@ const formatter = {
 
             paths[route] = apiPath;
         });
-
-        let scopes = {};
-        scopesSet.forEach(item => scopes[item] = item);
 
         return {
             openapi: '3.0.0',
@@ -266,9 +269,6 @@ const formatter = {
                 securitySchemes: {
                     oauth: {
                         type: 'oauth2',
-                        name: 'OAuth 2',
-                        scheme: 'http',
-                        openIdConnectUrl: 'https://id.twitch.tv/oauth2/.well-known/openid-configuration',
                         description: 'Twitch APIs use OAuth 2.0 access tokens to access resources. If you’re not already familiar with the specification, reading it may help you better understand how to get access tokens to use with the Twitch API.',
                         flows: {
                             implicit: {

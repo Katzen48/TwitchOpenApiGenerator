@@ -21,7 +21,7 @@ const YAML = require('yaml');
     let newDocs = await scraperController(browserInstance, docs);
 
     if (newDocs) {
-        fs.writeFileSync('./swagger.yaml', YAML.stringify(newDocs));
+        fs.writeFileSync('./swagger.yaml', YAML.stringify(newDocs, {aliasDuplicateObjects: false}));
     }
 
     process.exit();

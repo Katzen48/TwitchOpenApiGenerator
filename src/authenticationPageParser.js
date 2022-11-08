@@ -22,9 +22,11 @@ module.exports = function (routes) {
                     object[column] = cell.innerText;
                 } else {
                     let values = [];
+                    let description = cell.childNodes.length > 1 && cell.childNodes[0].nodeType === 3 ? cell.childNodes[0].nodeValue : null;
 
                     cell.querySelectorAll('a').forEach(link => {
                         values.push({
+                            description,
                             text: link.innerText,
                             url: link.href.substring(link.href.indexOf('#') + 1).toLowerCase()
                         });
@@ -41,11 +43,18 @@ module.exports = function (routes) {
     let scopes = {};
     extractTableData(document.querySelectorAll('.text-content table')[0]).forEach(scope => {
         scope['Type of Access and Associated Endpoints'].forEach(endpoint => {
+            if (!endpoint.hasOwnProperty('url')) {
+                return;
+            }
+
             if (!scopes.hasOwnProperty(endpoint.url)) {
                 scopes[endpoint.url] = new Set();
             }
 
-            scopes[endpoint.url].add(scope['Scope Name']);
+            scopes[endpoint.url].add({
+                name: scope['Scope Name'],
+                description: endpoint.description ? endpoint.description.replace(/[\n\r]/g, '') : scope['Scope Name'],
+            });
         });
     });
 
@@ -55,7 +64,7 @@ module.exports = function (routes) {
             routeScopes = [];
         }
 
-        route.scopes = routeScopes;
+        route.scopes = Array.from(routeScopes);
 
         return route;
     });
