@@ -81,6 +81,7 @@ module.exports = function () {
                 });
 
         let queryParameters = queryParametersIndex === -1 ? [] : extractTableData(leftDocsChildren[queryParametersIndex + queryParametersHeadlineIndex])
+            .filter(queryParameter => queryParameter.hasOwnProperty("Parameter") && queryParameter.hasOwnProperty("Type"))
             .map(queryParameter => {
                 return {
                     name: queryParameter['Parameter'],
