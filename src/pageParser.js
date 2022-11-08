@@ -80,15 +80,13 @@ module.exports = function () {
                     }
                 });
 
-        let queryParameters = queryParametersIndex === -1 ? [] :
-            Array.from(leftDocsChildren[queryParametersIndex + queryParametersHeadlineIndex].querySelectorAll('tbody tr'))
-                .filter(tr => !!tr.children[0].querySelector('code'))
-                .map(child => {
-                    return {
-                        name: child.children[0].querySelector('code').innerText,
-                        type: child.children[1].innerText,
-                    }
-                });
+        let queryParameters = queryParametersIndex === -1 ? [] : extractTableData(leftDocsChildren[queryParametersIndex + queryParametersHeadlineIndex])
+            .map(queryParameter => {
+                return {
+                    name: queryParameter['Parameter'],
+                    type: queryParameter['Type'],
+                }
+        });
 
         let responseFields = responseFieldsIndex === -1 ? [] :
             Array.from(leftDocsChildren[responseFieldsIndex + responseFieldsHeadlineIndex].querySelectorAll('tbody tr'))
