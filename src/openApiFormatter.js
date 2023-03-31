@@ -1,3 +1,4 @@
+const {request} = require("playwright");
 const HOST = 'api.twitch.tv';
 const BASE_PATH = '/helix';
 const SCHEME = 'https';
@@ -59,7 +60,7 @@ const formatter = {
         }
 
         try {
-            let json = example.replaceAll('\n', '')
+            json = example/*.replaceAll('\n', '')*/
                 // Get rid of `...` in the beginning of an object
                 .replace(new RegExp("[\\{][\\s]*([\\.][\\s]?){3}(?=[\\s]*[\"])", "g"), "{")
                 // Get rid of `...` in the middle of an object
@@ -73,6 +74,10 @@ const formatter = {
                 .replace(new RegExp("[}][,]?[\\s]*([\\.][\\s]?){3}(?=[\\s]*[\\{])", "g"), "},")
                 // Get rid of `...` at the end of an array
                 .replace(new RegExp("[}][,]?[\\s]*([\\.][\\s]?){3}(?=[\\s]*[\\]])", "g"), "}")
+
+
+                // Add missing comma after attribute
+                .replace(new RegExp("(?<![,{[])\\n(?=[\\s]*[\"])", "g"), ",\n")
 
                 // Get rid of trailing comma at the end of an array
                 .replace(new RegExp("[}][,][\\s]*(?=[\\s]*[\\]])", "g"), "}");
