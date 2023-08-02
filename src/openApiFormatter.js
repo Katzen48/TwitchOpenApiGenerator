@@ -245,7 +245,7 @@ const formatter = {
 
             let docsUrl = path.docsUrl
             endpointSummary.push([
-                `[${route}](${docsUrl})`,
+                `<a target="_blank" href="${docsUrl}">${route}</a>`,
                 path.method.toLowerCase(),
                 Object.keys(responses).join(','),
                 apiPath[path.method.toLowerCase()].security[0].oauth.join(','),
