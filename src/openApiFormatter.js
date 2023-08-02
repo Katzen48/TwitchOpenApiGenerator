@@ -1,4 +1,3 @@
-const {request} = require("playwright");
 const HOST = 'api.twitch.tv';
 const BASE_PATH = '/helix';
 const SCHEME = 'https';
@@ -119,7 +118,7 @@ const formatter = {
                 return 'string';
         }
     },
-    toOpenApi(json, version) {
+    toOpenApi(json, version, endpointSummary) {
         let paths = {};
         let scopes = {};
 
@@ -243,6 +242,14 @@ const formatter = {
             }
 
             paths[route] = apiPath;
+
+            endpointSummary.push([
+                route,
+                path.method.toLowerCase(),
+                Object.keys(responses).join(','),
+                apiPath[path.method.toLowerCase()].security[0].oauth.join(','),
+                body.schema.properties.length > 0 ? ':white_check_mark:' : ':x:'
+            ])
         });
 
         return {

@@ -21,6 +21,16 @@ const YAML = require('yaml');
     let newDocs = await scraperController(browserInstance, docs);
 
     if (newDocs) {
+        if (fs.existsSync('./override.yaml')) {
+            const overrideFile = fs.readFileSync('./override.yaml');
+            const override = YAML.parse(overrideFile.toString());
+
+            newDocs = {
+                ...newDocs,
+                ...override
+            }
+        }
+
         fs.writeFileSync('./swagger.yaml', YAML.stringify(newDocs, {aliasDuplicateObjects: false}));
     }
 
