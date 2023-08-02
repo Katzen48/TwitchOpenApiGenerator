@@ -20,7 +20,7 @@ async function scrapeAll(browserInstance, docs){
             {data: 'Method', header: true},
             {data: 'Responses', header: true },
             {data: 'Scopes', header: true},
-            {data: 'Body', header: true}
+            {data: 'Request Body', header: true}
         ]];
         let routes = await pageScraper.getAllDocParts(browser);
         routes = await pageScraper.getScopes(browser, routes);

@@ -111,6 +111,7 @@ module.exports = function () {
             tags: [tableEndpoint.Resource],
             example,
             id: id.toLowerCase(),
+            docsUrl: tableEndpoint.Endpoint.url
         });
     });
 
