@@ -4,7 +4,7 @@ runs:
   using: 'composite'
   steps:
     - name: Copy Crawler
-      run: cp -R ${{ github.action_path }}/src . && cp ${{ github.action_path }}/package.json .
+      run: cp -R ${{ github.action_path }}/src . && cp ${{ github.action_path }}/package.json . && cp ${{ github.action_path }}/package-lock.json .
       shell: bash
     - name: Install Node
       uses: actions/setup-node@v2
