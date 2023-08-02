@@ -243,7 +243,7 @@ const formatter = {
 
             paths[route] = apiPath;
 
-            let docsUrl = route.docsUrl
+            let docsUrl = path.docsUrl
             endpointSummary.push([
                 `[${route}](${docsUrl})`,
                 path.method.toLowerCase(),
